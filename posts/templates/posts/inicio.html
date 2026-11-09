@@ -2,6 +2,34 @@
 
 {% block title %} Inicio | Mi Blog{% endblock %}
 {% block content %}
- <h2>Mi blog</h2>
- <p>Bienvenido a mi blog.</p>
+<h2>Mi blog</h2>
+<p>Bienvenido a mi blog.</p>
+
+{% if criterio %}
+    <h3>Resultados de búsqueda para: "{{ criterio }}"</h3>
+{% else %}
+    <h3>Últimas publicaciones</h3>
+{% endif %}
+
+{% for post in posts %}
+<article>
+    {% if post.imagen %}
+    <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" width="250">
+    {% endif %}
+    <h2>
+        <a href="{% url 'detalle_post' post.slug %}">{{ post.titulo }}</a>
+    </h2>
+    <p>{{ post.contenido|truncatewords:30 }}</p>
+    <p>Autor: {{ post.autor }}</p>
+    <p>Fecha: {{ post.fecha_creacion }}</p>
+</article>
+{% empty %}
+<p>
+    {% if criterio %}
+    No se encontraron publicaciones que coincidan con tu búsqueda.
+    {% else %}
+    No hay publicaciones para mostrar.
+    {% endif %}
+</p>
+{% endfor %}
 {% endblock %}

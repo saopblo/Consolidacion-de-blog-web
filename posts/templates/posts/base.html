@@ -17,6 +17,16 @@
             <a href="{% url 'inicio' %}">Inicio</a>
             <a href="{% url 'lista_posts' %}">Posts</a>
             <a href="{% url 'acerca' %}">Acerca de</a>
+            <form action="{% url 'inicio' %}" method="GET" class="d-flex">
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Buscar publicaciones..."
+                    value="{{ request.GET.q|default:'' }}"
+                    class="form-control me-2"
+                >
+                <button type="submit" class="btn btn-outline-success">Buscar</button>
+            </form>
             {% if user.is_authenticated %}
             <a href="{% url 'crear_post' %}">Crear Post</a>
             <div class="user-menu">
@@ -35,6 +45,15 @@
             <a href="{% url 'accounts:registro' %}">Registrarse</a>
             {% endif %}
         </nav>
+         {% if messages %}
+         <div class="mensajes">
+        {% for message in messages %}
+        <div class="mensaje {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+       </div>
+    {% endif %} 
     </header>
 
     <main>
