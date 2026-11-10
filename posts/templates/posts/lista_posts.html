@@ -1,27 +1,32 @@
 {% extends "posts/base.html" %}
 
-{% block title %}Listado de posts | Mi Blog{% endblock %}
+{% block title %}Publicaciones | Mi Blog{% endblock %}
+{% block header_title %}Publicaciones{% endblock %}
+{% block header_subtitle %}Todas las historias del blog{% endblock %}
 
 {% block content %}
-<h1>Listado de posts</h1>
-<a href="{% url 'crear_post' %}">Crear nuevo post</a>
+{% if user.is_authenticated %}
+    <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-primary text-uppercase" href="{% url 'crear_post' %}">Crear publicación</a>
+    </div>
+{% endif %}
 
 {% for post in posts %}
-<article>
-{% if post.imagen %}
-<img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" width="250" />
-{% endif %}
-<h2>
-<a href="{% url 'detalle_post' post.slug %}">
-{{ post.titulo }}
-</a>
-</h2>
-<p>{{ post.contenido|truncatewords:30 }}</p>
-<p>Autor: {{ post.autor }}</p>
-<p>Estado: {{ post.estado }}</p>
-<p>Fecha: {{ post.fecha_creacion }}</p>
-</article>
+    <div class="post-preview">
+        <a href="{% url 'detalle_post' post.slug %}">
+            <h2 class="post-title">{{ post.titulo }}</h2>
+            <h3 class="post-subtitle">{{ post.contenido|truncatewords:30 }}</h3>
+        </a>
+        <p class="post-meta">
+            Publicado por {{ post.autor }}
+            el {{ post.fecha_creacion|date:"d/m/Y" }}
+            {% if user == post.autor and post.estado == 'borrador' %}
+                <span class="badge text-bg-secondary">Borrador</span>
+            {% endif %}
+        </p>
+    </div>
+    <hr class="my-4" />
 {% empty %}
-<p>No hay posts cargados.</p>
+    <p>No hay publicaciones para mostrar.</p>
 {% endfor %}
 {% endblock %}

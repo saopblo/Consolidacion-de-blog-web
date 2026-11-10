@@ -1,24 +1,26 @@
 {% extends "posts/base.html" %}
+{% load static %}
 
 {% block title %}Acerca de | Mi Blog{% endblock %}
+{% block header_image %}{% static 'posts/clean-blog/assets/img/about-bg.jpg' %}{% endblock %}
+{% block header_title %}Acerca de{% endblock %}
+{% block header_subtitle %}Conoce el propósito de este espacio{% endblock %}
 
 {% block content %}
-<section class="acerca-de">
-    <h2>Acerca de este proyecto</h2>
-
-    <article class="proposito">
+<section>
+    <h2 class="section-heading">Acerca de este proyecto</h2>
+    <div>
         <h3>Propósito del sitio</h3>
         <p>
             Este blog fue creado como un espacio para compartir conocimientos, tutoriales y experiencias 
             sobre el mundo del desarrollo web, con especial foco en Python y Django. 
         </p>
-    </article>
-
-    <article class="autor">
+    </div>
+    <div>
         <h3>Sobre el autor</h3>
         <p>
             ¡Hola! Soy <strong>Pablo Nuñez</strong>, desarrollador jr de Python.
         </p>
-    </article>
+    </div>
 </section>
 {% endblock %}
