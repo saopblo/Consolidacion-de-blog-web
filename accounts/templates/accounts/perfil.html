@@ -1,15 +1,18 @@
 {% extends "posts/base.html" %}
-{% block title %}Mi perfil{% endblock %}
+{% block title %}Mi perfil | Mi Blog{% endblock %}
+{% block header_title %}Mi perfil{% endblock %}
+{% block header_subtitle %}Información de tu cuenta{% endblock %}
 {% block content %}
-<h1>Mi perfil</h1>
 <p>Usuario: {{ user.username }}</p>
 <p>Email: {{ user.email }}</p>
 <p>Biografía: {{ perfil.biografia }}</p>
 <p>Sitio web: {{ perfil.link_web }}</p>
 {% if perfil.avatar %}
-  <img src="{{ perfil.avatar.url }}" alt="Avatar" width="120" />
+  <div class="avatar-profile-frame">
+    <img class="avatar-profile" src="{{ perfil.avatar.url }}" alt="Avatar" />
+  </div>
 {% endif %}
 <p>
-  <a href="{% url 'accounts:editar_perfil' %}">Editar perfil</a>
+  <a class="btn btn-primary text-uppercase" href="{% url 'accounts:editar_perfil' %}">Editar perfil</a>
 </p>
 {% endblock %}
