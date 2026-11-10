@@ -3,7 +3,7 @@
 {% block title %}Eliminar post | Mi Blog{% endblock %}
 
 {% block content %}
-<h1>Eliminar post</h1>
+<h1 class="section-heading">Eliminar publicación</h1>
 
 <p>¿Seguro que querés eliminar el post <strong>{{ post.titulo }}</strong>?</p>
 
@@ -12,5 +12,5 @@
 <button type="submit">Sí, eliminar</button>
 </form>
 
-<a href="{% url 'detalle_post' post.slug %}">Cancelar</a>
+<a class="btn btn-outline-secondary mt-3" href="{% url 'detalle_post' post.slug %}">Cancelar</a>
 {% endblock %}

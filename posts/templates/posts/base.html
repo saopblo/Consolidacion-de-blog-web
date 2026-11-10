@@ -2,48 +2,161 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Blog desarrollado en Django" />
+    <meta name="author" content="Pablo Nuñez" />
     <title>{% block title %}Mi Blog{% endblock %}</title>
 
    
-    <link rel="stylesheet" href="{% static 'posts/css/estilos.css' %}">
+    <link rel="stylesheet" href="{% static 'posts/clean-blog/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'posts/clean-blog/css/estilos.css' %}">
+        <!-- Font Awesome para iconos fas -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   
 </head>
 <body>
-    <header>
-        <h1>Mi blog</h1>
-        <nav>
-            <a href="{% url 'inicio' %}">Inicio</a>
-            <a href="{% url 'lista_posts' %}">Posts</a>
-            <a href="{% url 'acerca' %}">Acerca de</a>
-            {% if user.is_authenticated %}
-            <a href="{% url 'crear_post' %}">Crear Post</a>
-            <div class="user-menu">
-                {% if user.avatar and user.avatar.imagen %}
-                    <img src="{{ user.avatar.imagen.url }}" alt="Avatar" class="avatar-thumb">
-                {% else %}
-                    <span class="avatar-placeholder">👤</span>
-                {% endif %}
-                <span>Hola, <strong>{{ user.username }}</strong></span>
-                <a href="{% url 'accounts:editar_perfil' %}">Editar Perfil</a>
-                <a href="{% url 'accounts:agregar_avatar' %}">Cambiar Avatar</a>
-                <a href="{% url 'accounts:logout' %}">Cerrar Sesión</a>
+    <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{% block header_image %}{% static 'posts/clean-blog/assets/img/home-bg.jpg' %}{% endblock %}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="{% block masthead_class %}site-heading{% endblock %}">
+                            <h1>{% block header_title %}Mi Blog{% endblock %}</h1>
+                            <span class="subheading">{% block header_subtitle %}Historias, artículos y publicaciones{% endblock %}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% else %}
-            <a href="{% url 'accounts:login' %}">Iniciar Sesión</a>
-            <a href="{% url 'accounts:registro' %}">Registrarse</a>
-            {% endif %}
+        </header>
+
+    <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="{% url 'inicio' %}">Blog Django</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menú
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'inicio' %}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'lista_posts' %}">Publicaciones</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'acerca' %}">Acerca de</a></li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span>Hola, {{ user.username }}</span>
+                                    {% if user.avatar and user.avatar.imagen %}
+                                        <img class="avatar-navbar" src="{{ user.avatar.imagen.url }}" alt="Avatar de {{ user.username }}" />
+                                    {% else %}
+                                        <span class="placeholder-avatar">👤</span>
+                                    {% endif %}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+                                    <li><a class="dropdown-item" href="{% url 'accounts:editar_perfil' %}">Editar Perfil</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'accounts:agregar_avatar' %}">Cambiar Avatar</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}" onclick="return confirm('¿Estás seguro/a de que deseas cerrar sesión?');">Cerrar Sesión</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'crear_post' %}">+ Crear Post</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'accounts:login' %}">Iniciar Sesión</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'accounts:registro' %}">Registrarse</a></li>
+                        {% endif %}
+                    </ul>
+                    <form class="nav-search d-flex ms-lg-3 mb-3 mb-lg-0" action="{% url 'inicio' %}" method="get" role="search">
+                        <label class="visually-hidden" for="navbarSearch">Buscar publicaciones</label>
+                        <input
+                            class="form-control form-control-sm"
+                            id="navbarSearch"
+                            type="search"
+                            name="q"
+                            placeholder="Buscar publicaciones..."
+                            value="{{ request.GET.q|default:'' }}"
+                        />
+                        <button class="btn btn-outline-light btn-sm" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </div>
         </nav>
-    </header>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+    <main class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
 
-    <footer>
-        <p>Creado con Django</p>
-    </footer>
+                        <!-- Flash / System Messages -->
+                        {% if messages %}
+                            <div class="mb-4">
+                                {% for message in messages %}
+                                    <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% block content %}{% endblock %}
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    <!-- Footer-->
+        <footer class="border-top">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <ul class="list-inline text-center">
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="https://github.com/saopblo/Pre_entrega_7" target="_blank">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="small text-center text-muted fst-italic">Copyright &copy; Mi Blog Django 2026</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.alert').forEach(function(mensaje) {
+                setTimeout(function() {
+                    mensaje.style.transition = 'opacity 0.5s ease';
+                    mensaje.style.opacity = '0';
+                    setTimeout(function() {
+                        mensaje.remove();
+                    }, 500);
+                }, 3500);
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 {% extends "posts/base.html" %}
-{% block title %}Sesión cerrada{% endblock %}
+{% block title %}Sesión cerrada | Mi Blog{% endblock %}
+{% block header_title %}Sesión cerrada{% endblock %}
+{% block header_subtitle %}Hasta pronto{% endblock %}
 {% block content %}
 <h1>Sesión cerrada</h1>
 <p><a href="{% url 'accounts:login' %}">Volver a iniciar sesión</a></p>

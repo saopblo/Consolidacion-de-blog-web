@@ -1,148 +1,115 @@
-# Blog Project: Python y Django (Preentrega 11)
+# Blog Django
 
+Aplicación web de blog desarrollada con Django. Permite publicar artículos con imágenes, administrar perfiles y avatares, y comentar publicaciones.
 
-Aplicación web de blog desarrollada con **Python** y **Django**. Incluye el ciclo de vida completo de las publicaciones (**CRUD**), URLs amigables mediante `slug`, subida de imágenes de portada y un **sistema de autenticación de usuarios y perfiles** (login, logout, registro y avatares).
+## Funcionalidades
 
----
+- **Publicaciones:** crear, consultar, editar y eliminar posts desde la web. Cada post puede incluir una imagen y tiene un enlace basado en su slug.
+- **Estados y visibilidad:**
+  - Los posts publicados son visibles para cualquier visitante.
+  - Los borradores y los posts archivados solo son visibles para su autor, incluso si otro usuario inició sesión.
+  - Cada usuario puede crear posts, pero solo el autor puede editar, ver si no está publicado, o eliminar su propio contenido.
+- **Comentarios:** solo usuarios autenticados pueden agregar comentarios. Los visitantes anónimos pueden leer los comentarios de las publicaciones que tienen permitido ver.
+- **Cuentas y perfiles:** registro, inicio y cierre de sesión, edición del perfil y carga de avatar. Las opciones de perfil y avatar están agrupadas en el menú del usuario autenticado. El avatar se muestra dentro de un espacio de dimensiones definidas y se adapta sin recortar la imagen.
+- **Permisos:** crear publicaciones, comentar, editar el perfil y cargar un avatar requiere iniciar sesión. Las rutas de edición y eliminación también verifican que el usuario sea el autor.
+- **Confirmaciones:** la eliminación de un post muestra una pantalla para confirmar o cancelar antes de borrarlo. Al elegir cerrar sesión, el sitio solicita confirmación.
+- **Búsqueda:** permite buscar publicaciones por título, contenido, autor y fecha.
 
-## 📝 Características Principales
+## Tecnologías
 
-### 🔐 Autenticación y cuentas (`accounts`)
-- **Registro** de nuevos usuarios con `UserCreationForm`.
-- **Inicio y cierre de sesión** mediante las vistas de autenticación.
-- **Perfil de usuario:** edición de datos y carga de avatar/foto de perfil, vinculada al modelo `User` mediante un `OneToOneField`.
+- Python 3.12 o posterior
+- Django 6.1.1
+- SQLite
+- Pillow para el manejo de imágenes
+- python-decouple para la configuración
+- Plantillas Django, HTML, CSS y Bootstrap
 
-### 📰 Gestión de publicaciones (`posts`)
-- **Crear (Create):** formulario dinámico (`ModelForm`) con carga de imagen de portada.
-- **Leer (Read):** listado principal y vista de detalle accesible por `SlugField`.
-- **Editar (Update):** modificación de posts existentes, con el formulario precargado mediante `instance`.
-- **Eliminar (Delete):** borrado seguro con pantalla de confirmación previa.
+## Requisitos
 
-### 🛡️ Seguridad y permisos
-- Vistas críticas protegidas con el decorador `@login_required`.
-- Asignación automática del usuario autenticado como autor del post (`post.autor = request.user`).
+- Python 3.12 o posterior
+- Git
 
-### 🖼️ Archivos media e imágenes
-- Almacenamiento local de portadas y avatares con `Pillow`, `MEDIA_ROOT` y `MEDIA_URL`.
+## Instalación y ejecución
 
----
+### 1. Clonar el repositorio
 
-## 📁 Estructura del Repositorio
-
-```text
-blog_project/
-├── blog_project/              # Configuración principal (settings.py, urls.py)
-├── media/                     # Archivos e imágenes subidos (portadas, avatares)
-├── posts/                     # App de publicaciones (CRUD)
-│   ├── static/
-│   │   └── posts/css/estilos.css
-│   ├── templates/posts/
-│   │   ├── base.html          # Plantilla base (menú y estructura común)
-│   │   ├── inicio.html        # Listado principal de publicaciones
-│   │   ├── crear_post.html    # Formulario para crear publicaciones
-│   │   ├── detalle_post.html  # Vista individual del post por slug
-│   │   ├── editar_post.html   # Formulario para editar publicaciones
-│   │   └── eliminar_post.html # Confirmación de eliminación
-│   ├── admin.py
-│   ├── forms.py               # PostForm (ModelForm)
-│   ├── models.py              # Modelo Post (ImageField y SlugField)
-│   ├── urls.py                # Rutas del CRUD
-│   └── views.py               # Vistas de crear, detalle, editar y eliminar
-├── accounts/                  # App de autenticación y usuarios
-│   ├── templates/accounts/
-│   │   ├── login.html         # Inicio de sesión
-│   │   ├── registro.html      # Registro de usuarios
-│   │   ├── perfil.html        # Perfil del usuario
-│   │   └── agregar_avatar.html# Carga de foto de perfil
-│   ├── admin.py
-│   ├── forms.py
-│   ├── models.py              # Modelo Avatar (OneToOneField con User)
-│   ├── urls.py
-│   └── views.py
-├── manage.py                  # Script de administración de Django
-├── README.md                  # Documentación del proyecto
-└── requirements.txt           # Dependencias (Django, Pillow, etc.)
+```bash
+git clone https://github.com/saopblo/Pre_entrega_10.git
+cd Pre_entrega_10
 ```
 
----
+### 2. Crear y activar un entorno virtual
 
-## ⚙️ Instalación y Puesta en Marcha
+En Windows PowerShell:
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone <url-del-repositorio>
-   cd blog_project
-   ```
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
 
-2. **Crear y activar un entorno virtual:**
-   ```bash
-   python -m venv venv
-   # Windows
-   venv\Scripts\activate
-   # macOS / Linux
-   source venv/bin/activate
-   ```
+En macOS o Linux:
 
-3. **Instalar las dependencias:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-4. **Aplicar las migraciones:**
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+### 3. Instalar dependencias
 
-5. **Crear un superusuario (opcional, para el Admin):**
-   ```bash
-   python manage.py createsuperuser
-   ```
+```bash
+python -m pip install -r requirements.txt
+```
 
-6. **Ejecutar el servidor de desarrollo:**
-   ```bash
-   python manage.py runserver
-   ```
+### 4. Configurar el entorno local
 
-   Luego abre `http://127.0.0.1:8000/` en tu navegador.
+Crea un archivo `.env` a partir de `.env.example`.
 
----
+En Windows PowerShell:
 
-## 🚀 Uso
+```powershell
+Copy-Item .env.example .env
+```
 
-| Sección    | Descripción                                                        |
-|------------|--------------------------------------------------------------------|
-| Inicio     | Listado de todas las publicaciones                                 |
-| Registro   | Creación de una cuenta de usuario                                  |
-| Login      | Inicio de sesión (requerido para crear, editar o eliminar posts)   |
-| Perfil     | Edición de datos y carga de avatar                                 |
-| Crear      | Publicación de un nuevo post con imagen de portada                 |
-| Detalle    | Vista de un post mediante su slug (ej: `/post/mi-primer-post/`)    |
-| Editar     | Modificación del contenido o la imagen de un post propio           |
-| Eliminar   | Confirmación previa al borrado definitivo del post                 |
-| Admin      | Gestión de posts y usuarios en `http://127.0.0.1:8000/admin/`     |
+En macOS o Linux:
 
----
+```bash
+cp .env.example .env
+```
 
-## 🛠️ Tecnologías Utilizadas
+Revisa el archivo `.env` y configura `SECRET_KEY` con una clave local propia. `DEBUG=True` sirve para desarrollo local; no uses el modo de depuración ni claves de desarrollo en producción. El archivo `.env` está excluido de Git.
 
-- Python 3
-- Django
-- Pillow (procesamiento de imágenes)
-- SQLite (base de datos por defecto)
-- HTML5 y CSS3
+### 5. Crear la base de datos
 
----
+Aplica las migraciones incluidas en el repositorio:
 
-## 📌 Notas
+```bash
+python manage.py migrate
+```
 
-- Los archivos subidos se guardan en `media/`, carpeta excluida del control de versiones (ver `.gitignore`).
-- `db.sqlite3` tampoco se versiona.
-- Solo los usuarios autenticados pueden crear, editar o eliminar publicaciones.
+### 6. Crear una cuenta
 
----
+Inicia el servidor y registra un usuario desde la opción **Registrarse**. Para probar el panel de administración, crea además un superusuario:
 
-## 👤 Autor
+```bash
+python manage.py createsuperuser
+```
+
+### 7. Ejecutar el servidor
+
+```bash
+python manage.py runserver
+```
+
+Abre <http://127.0.0.1:8000/> en el navegador. El panel de administración está disponible en <http://127.0.0.1:8000/admin/>.
+
+## Imágenes y archivos estáticos
+
+Los archivos estáticos de la interfaz están dentro de `posts/static/`. Las imágenes cargadas para posts y avatares se guardan localmente bajo `media/`; esa carpeta y la base de datos local `db.sqlite3` están excluidas de Git. Al configurar el proyecto desde cero, la base de datos se crea con `migrate` y las imágenes se pueden cargar desde la aplicación.
+
+## Cuentas para pruebas
+
+No se publican contraseñas ni credenciales compartidas en este repositorio. Para probar el sitio, registra una cuenta propia desde la web. Si necesitas acceder al admin, crea un superusuario local con `python manage.py createsuperuser`.
+
+## Autor
 
 Pablo Nuñez
-Proyecto desarrollado como parte del curso de Python / Django: Preentrega 11.

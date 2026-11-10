@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Post
 
+
 admin.site.site_header = "Administracion de mi blog"
 
 @admin.register(Post)

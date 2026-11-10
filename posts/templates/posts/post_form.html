@@ -1,24 +1,23 @@
 {% extends "posts/base.html" %}
 
 {% block title %}{{ titulo_pagina }} | Mi Blog{% endblock %}
+{% block header_title %}{{ titulo_pagina }}{% endblock %}
+{% block header_subtitle %}Completa los datos de la publicación{% endblock %}
 
 {% block content %}
-<h1>{{ titulo_pagina }}</h1>
-
 {% if post and post.imagen %}
-<p>Imagen actual:</p>
-<img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" width="300" />
+    <p>Imagen actual:</p>
+    <img class="img-fluid" src="{{ post.imagen.url }}" alt="{{ post.titulo }}" />
 {% endif %}
 
 <form method="post" enctype="multipart/form-data">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit">{{ texto_boton }}</button>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">{{ texto_boton }}</button>
+    {% if post %}
+        <a href="{% url 'detalle_post' post.slug %}" class="btn btn-secondary">Cancelar</a>
+    {% else %}
+        <a href="{% url 'lista_posts' %}" class="btn btn-secondary">Cancelar</a>
+    {% endif %}
 </form>
-
-{% if post %}
-<a href="{% url 'detalle_post' post.slug %}">Cancelar edición</a>
-{% else %}
-<a href="{% url 'lista_posts' %}">Cancelar creación</a>
-{% endif %}
 {% endblock %}

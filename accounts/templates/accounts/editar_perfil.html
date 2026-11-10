@@ -1,7 +1,8 @@
 {% extends "posts/base.html" %}
-{% block title %}Editar perfil{% endblock %}
+{% block title %}Editar perfil | Mi Blog{% endblock %}
+{% block header_title %}Editar perfil{% endblock %}
+{% block header_subtitle %}Actualiza tu información{% endblock %}
 {% block content %}
-<h1>Editar perfil</h1>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}

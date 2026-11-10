@@ -1,7 +1,8 @@
 {% extends "posts/base.html" %}
-{% block title %}Subir avatar{% endblock %}
+{% block title %}Subir avatar | Mi Blog{% endblock %}
+{% block header_title %}Cambiar avatar{% endblock %}
+{% block header_subtitle %}Elige tu imagen de perfil{% endblock %}
 {% block content %}
-<h1>Subir avatar</h1>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p }}

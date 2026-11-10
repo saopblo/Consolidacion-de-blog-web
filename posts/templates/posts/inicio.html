@@ -1,7 +1,40 @@
 {% extends "posts/base.html" %}
 
-{% block title %} Inicio | Mi Blog{% endblock %}
+{% block title %}Inicio | Mi Blog{% endblock %}
+{% block header_title %}Mi Blog{% endblock %}
+{% block header_subtitle %}
+    {% if criterio %}Resultados de búsqueda para: "{{ criterio }}"{% else %}Ideas, historias y publicaciones{% endif %}
+{% endblock %}
+
 {% block content %}
- <h2>Mi blog</h2>
- <p>Bienvenido a mi blog.</p>
+{% if user.is_authenticated %}
+    <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-primary text-uppercase" href="{% url 'crear_post' %}">Crear publicación</a>
+    </div>
+{% endif %}
+
+{% for post in posts %}
+    <div class="post-preview">
+        <a href="{% url 'detalle_post' post.slug %}">
+            <h2 class="post-title">{{ post.titulo }}</h2>
+            <h3 class="post-subtitle">{{ post.contenido|truncatewords:30 }}</h3>
+        </a>
+        <p class="post-meta">
+            Publicado por {{ post.autor }}
+            el {{ post.fecha_creacion|date:"d/m/Y" }}
+            {% if user == post.autor and post.estado == 'borrador' %}
+                <span class="badge text-bg-secondary">Borrador</span>
+            {% endif %}
+        </p>
+    </div>
+    <hr class="my-4" />
+{% empty %}
+    <p>
+        {% if criterio %}
+            No se encontraron publicaciones que coincidan con tu búsqueda.
+        {% else %}
+            No hay publicaciones para mostrar.
+        {% endif %}
+    </p>
+{% endfor %}
 {% endblock %}

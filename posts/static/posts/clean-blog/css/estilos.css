@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+.nav-search {
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.nav-search input {
+    min-width: 12rem;
+}
+
+.avatar-navbar,
+.placeholder-avatar {
+    display: inline-flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 2.5rem;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.12);
+    vertical-align: middle;
+}
+
+.avatar-navbar {
+    object-fit: contain;
+}
+
+.placeholder-avatar {
+    color: #fff;
+}
+
+.avatar-profile-frame {
+    display: flex;
+    width: 7.5rem;
+    height: 7.5rem;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+}
+
+.avatar-profile {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@media (max-width: 991.98px) {
+    .nav-search {
+        padding: 0.5rem 0;
+    }
+
+    .nav-search input {
+        min-width: 0;
+        flex: 1;
+    }
+}
